@@ -22,6 +22,7 @@
         "expo-crypto": "~13.0.2",
         "expo-dev-client": "~4.0.14",
         "expo-status-bar": "~1.12.1",
+        "firebase-tools": "^13.10.1",
         "react": "^18.2.0",
         "react-native": "0.74.1",
         "react-native-gesture-handler": "~2.16.1",
@@ -44,7 +45,7 @@
     "jest": {
         "preset": "jest-expo",
         "transformIgnorePatterns": [
-            "node_modules/(?!(jest-)?react-native|react|@react-native|@react-native-firebase|@tanstack/react-query|axios|expo|@expo|expo-crypto|expo-dev-client|expo-status-bar|@react-navigation|react-native-gesture-handler|react-native-safe-area-context|react-native-screens)"
+            "node_modules/(?!(jest-)?react-native|react|@react-native|@react-native-firebase|@tanstack/react-query|axios|expo|@expo|expo-crypto|expo-dev-client|expo-status-bar|@react-navigation|react-native-gesture-handler|react-native-safe-area-context|react-native-screens|firebase-tools)"
         ]
     },
     "private": true
