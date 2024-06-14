@@ -56,7 +56,10 @@ export const Login = ({ click = () => {}, print = () => {} }) => {
                     action={() => {
                         auth()
                             .signInWithEmailAndPassword(Email, Password)
-                            .then((usr) => navigation.navigate('Home'))
+                            .then((usr) => {
+                                console.log(usr);
+                                navigation.navigate('Home');
+                            })
                             .catch((err) => console.error(err));
                     }}
                 />
