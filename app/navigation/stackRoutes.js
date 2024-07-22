@@ -1,9 +1,9 @@
 import Login from '../views/login';
 import CreateUser from '../views/createUser';
-import Home from '../views/home';
+import Leagues from '../views/leagues';
 
 export default {
     Login,
     CreateUser,
-    Home,
+    Leagues,
 };

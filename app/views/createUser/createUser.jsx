@@ -18,12 +18,13 @@ import { styles } from './createUser.styles';
 
 //Assets
 import userImg from '../../assets/icons/usuario.png';
+import back from '../../assets/icons/back.png';
 
 //Utils
 import { UploadFile } from '../../utils/uploadFile';
-import back from '../../assets/icons/back.png';
 
 export const CreateUser = (props) => {
+    const [userName, setUserName] = useState();
     const [Email, setEmail] = useState();
     const [Password, setPassword] = useState();
     const [Phone, setPhone] = useState();
@@ -127,6 +128,13 @@ export const CreateUser = (props) => {
                 />
             </ModalCustom>
             <Input
+                title="Username"
+                custom={{
+                    value: userName,
+                    onChangeText: (name) => setUserName(name),
+                }}
+            />
+            <Input
                 title="Email"
                 custom={{
                     value: Email,
@@ -155,7 +163,7 @@ export const CreateUser = (props) => {
                         email: Email,
                         phoneNumber: Phone,
                         password: Password,
-                        displayName: 'Person X',
+                        displayName: userName,
                         photoURL: Uri,
                     };
                     mutateAsync(usr)
@@ -163,8 +171,8 @@ export const CreateUser = (props) => {
                             auth()
                                 .signInWithEmailAndPassword(Email, Password)
                                 .then((user) => {
-                                    console.log({ user });
-                                    navigation.navigate('Home');
+                                    console.log({ user, usr });
+                                    navigation.navigate('Leagues');
                                 })
                                 .catch((err) => console.error(err));
                         })

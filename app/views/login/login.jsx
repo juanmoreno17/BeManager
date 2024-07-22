@@ -25,7 +25,7 @@ export const Login = ({ click = () => {}, print = () => {} }) => {
     useEffect(() => {
         auth().onAuthStateChanged((usr) => {
             if (usr) {
-                navigation.navigate('Home');
+                navigation.navigate('BottomTabs');
             }
         });
     }, [navigation]);
@@ -58,7 +58,7 @@ export const Login = ({ click = () => {}, print = () => {} }) => {
                             .signInWithEmailAndPassword(Email, Password)
                             .then((usr) => {
                                 console.log(usr);
-                                navigation.navigate('Home');
+                                navigation.navigate('BottomTabs');
                             })
                             .catch((err) => console.error(err));
                     }}

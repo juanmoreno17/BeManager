@@ -6,6 +6,7 @@ import auth from '@react-native-firebase/auth';
 
 //Screen
 import Routes from './stackRoutes';
+import BottomTabs from './bottomTabs';
 
 //Assets
 import logout from '../assets/icons/logout.png';
@@ -52,10 +53,27 @@ export const AppStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen
-                    name="Home"
-                    component={Routes.Home}
+                    name="Leagues"
+                    component={Routes.Leagues}
                     options={(nav) => ({
-                        title: 'Home',
+                        title: null,
+                        headerStyle: {
+                            backgroundColor: '#52C1CA',
+                        },
+                        headerTintColor: '#FFFFFF',
+                        headerTitleStyle: {
+                            fontWeight: 'bold',
+                        },
+                        headerTitleAlign: 'center',
+                        headerRight: () => getButton(nav),
+                        headerLeft: () => null,
+                    })}
+                />
+                <Stack.Screen
+                    name="BottomTabs"
+                    component={BottomTabs}
+                    options={(nav) => ({
+                        title: null,
                         headerStyle: {
                             backgroundColor: '#52C1CA',
                         },
