@@ -1,11 +1,37 @@
 # BeManager — Fantasy de fútbol móvil (React Native + Firebase)
 
-> App móvil para gestionar ligas de fútbol virtuales con mercado de fichajes por pujas, clasificación en tiempo (casi) real y administración de ligas.  
+> Aplicación móvil cliente-servidor para gestión de ligas deportivas con datos sincronizados en tiempo real.
 > Frontend en **React Native**, backend **serverless** con **Firebase/Cloud Functions**, media en **Cloudinary** y SMS con **Twilio**.
 
-![status-badge](https://img.shields.io/badge/status-academic--project-green)
+![status-badge](https://img.shields.io/badge/status-personal--project-green)
 ![react-native](https://img.shields.io/badge/React%20Native-0.xx-blue)
 ![firebase](https://img.shields.io/badge/Firebase-Cloud%20Functions%20%7C%20Auth%20%7C%20Firestore-orange)
+
+---
+
+## 👨‍💻 Mi participación
+
+Proyecto desarrollado íntegramente por mí como Trabajo Fin de Grado.
+
+Me encargué de:
+- Diseño de la arquitectura cliente-servidor
+- Implementación del frontend móvil en React Native
+- Desarrollo del backend en Cloud Functions
+- Modelado de la base de datos en Firestore
+- Integración de servicios externos (Cloudinary y Twilio)
+- Pruebas y depuración de la aplicación
+
+---
+
+## 📱 Capturas
+
+| Login                          | Ligas                               | Mercado                         |
+|--------------------------------|-------------------------------------|---------------------------------|
+| ![](app/assets/docs/login.PNG) | ![](app/assets/docs/my_leagues.PNG) | ![](app/assets/docs/market.PNG) |
+
+| Equipo                         | Clasificación                      | Perfil                         |
+|--------------------------------|------------------------------------|--------------------------------|
+| ![](app/assets/docs/squad.PNG) | ![](app/assets/docs/standings.PNG) | ![](app/assets/docs/admin.PNG) |
 
 ---
 
@@ -23,6 +49,23 @@
 
 ---
 
+## 🧩 Retos técnicos
+
+Durante el desarrollo surgieron varios problemas típicos de aplicaciones cliente-servidor:
+
+- Sincronización de datos entre múltiples usuarios en tiempo real
+- Evitar inconsistencias en el mercado de fichajes al realizar pujas simultáneas
+- Gestión de estado de usuario tras autenticación
+- Minimizar llamadas innecesarias al backend
+
+### Soluciones aplicadas
+- Uso de React Query para cacheo y revalidación automática
+- Lógica crítica trasladada a Cloud Functions para evitar manipulación desde cliente
+- Uso de Context API para estado global de usuario y ligas
+- Separación de responsabilidades entre frontend y backend
+
+---
+
 ## 🧱 Arquitectura (resumen)
 
 - **App móvil (React Native)**
@@ -34,6 +77,15 @@
     - Extensión Twilio (envío SMS)
 - **Servicios externos**
     - Cloudinary (almacenamiento/transformación de imágenes)
+
+![Arquitectura de Bemanager](app/assets/docs/architecture.PNG)
+
+### Decisiones de diseño
+
+- Firestore no es accesible directamente desde el cliente; todas las operaciones críticas pasan por Cloud Functions para evitar manipulación de datos.
+- La lógica del mercado de fichajes se ejecuta en backend para evitar inconsistencias en pujas simultáneas.
+- React Query se utiliza para cacheo y sincronización eficiente entre cliente y servidor.
+- Cloudinary se usa para descargar carga de almacenamiento y optimizar imágenes.
 
 ---
 
@@ -49,103 +101,20 @@
 
 ## 📦 Estructura del proyecto
 
-```
-root/
-├─ app/				# App móvil (React Native)
-│  ├─ api/
-│  │  ├─ base/			# Axios base
-│  │  ├─ hooks/			# hooks con React Query
-│  │  └─ urls/			# definición de endpoints
-│  ├─ assets/			# iconos/medios locales
-│  ├─ components/		# UI reutilizable (button, input, modal, playerItem,…)
-│  ├─ hooks/			# contextos globales (user, gameLeague)
-│  ├─ navigation/		# Stack/Tabs
-│  ├─ utils/
-│  │  └─ config/		# p.ej. config Cloudinary (añadir a .gitignore)
-│  └─ views/			# screens (login, leagues, team, standings, transferMarket,…)
-├─ functions/			# Backend (Firebase Cloud Functions)
-│  ├─ config/			# serviceAccount.json (privado)
-│  ├─ createUser.js
-│  ├─ createGameLeague.js
-│  ├─ joinGameLeague.js
-│  ├─ startGameLeague.js
-│  ├─ makeBid.js
-│  ├─ resolveBids.js
-│  ├─ sellPlayer.js
-│  ├─ updateMarket.js
-│  ├─ updateStandings.js
-│  ├─ distributeRewards.js
-│  ├─ getTeams.js
-│  ├─ getPlayers.js
-│  ├─ getSquad.js
-│  ├─ getLeagues.js
-│  ├─ getGameLeagues.js
-│  ├─ getMyGameLeagues.js
-│  ├─ getBudget.js
-│  └─ index.js			# exporta las functions
-└─ README.md
-```
+- `/app` → Aplicación móvil (React Native)
+- `/functions` → Backend serverless (Firebase Cloud Functions)
 
 ---
 
-## 🚀 Empezar
+## 🚀 Ejecutar el proyecto localmente (resumen)
 
-### 1) Requisitos
-- **Node.js 20 LTS** + **npm**
-- **Android Studio** (API 30–35) con emulador o dispositivo físico
-- Cuenta en **Firebase**, **Cloudinary** y (opcional) **Twilio**
+### 1) Clonar repositorio
 
-### 2) Clonar e instalar
-```bash
-git clone https://github.com/USUARIO/REPO.git
-cd REPO
-npm install
-cd functions && npm install
-```
+### 2) Configurar credenciales Firebase
 
-### 3) Configurar Firebase
-1. Crea proyecto en **Firebase Console**
-2. Activa **Auth**, **Firestore**, **Cloud Functions**
-3. **Agregar app Android** (Project Overview → Agregar app → Android)
-    - Sigue los pasos y descarga `google-services.json`
-    - Colócalo en: `app/android/app/google-services.json`
-4. **Base URL Axios** (`/app/api/base/index.js`):
-   ```js
-   export const base = 'https://REGION-IDPROYECTO.cloudfunctions.net/';
-   ```
-5. **Service Account**
-    - Firebase Console → Configuración → *Cuentas de servicio* → *Generar nueva clave privada*
-    - Guarda el JSON en `functions/config/SERVICE_ACCOUNT.json` (añádelo a `.gitignore`)
-    - En `functions/index.js`, modifica `serviceAccount` con el nombre del archivo.
+### 3) npm install
 
-🔒 **Reglas Firestore (cliente cerrado):**
-Si todas las operaciones se hacen vía Cloud Functions, cierra Firestore al cliente:
-```bash
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
-    }
-  }
-}
-```
-
-### 4) Desplegar backend
-```bash
-firebase login
-cd functions
-firebase deploy --only functions
-```
-
-### 5) Cloudinary
-- Crea cuenta, obtiene credenciales y configúralas en `app/utils/config/config.js` (ignorado en `.gitignore`)
-
-### 6) Ejecutar la app
-```bash
-# desde root/app
-npm run android
-```
+### 4) npm run android
 
 ---
 
@@ -190,5 +159,20 @@ Para poblar ligas/equipos/jugadores:
 
 - **Código:** [MIT License]
 - **Memoria:** [CC BY-NC-SA 4.0]
+
+---
+
+## 📚 Qué aprendí
+
+Durante este proyecto aprendí principalmente:
+
+- Diseño de APIs y separación frontend/backend
+- Gestión de estado en aplicaciones móviles
+- Uso de servicios cloud en aplicaciones reales
+- Implementación de lógica de negocio en backend serverless
+- Integración de servicios externos (Cloudinary, Twilio)
+- Depuración y mantenimiento de un proyecto grande
+
+Este proyecto marcó mi transición de aprender programación a desarrollar software funcional.
 
 ---
